@@ -3,8 +3,23 @@ language: generic
 services:
     - docker
 
+
+
 before_install:
   - docker build -t jknighten/udemy-docker -f Dockerfile.dev .
 
 script:
   - docker run -e CI=true jknighten/udemy-docker npm run test -- --coverage
+
+deploy:
+  provider: elasticbeanstalk
+  region: "us-east-2"
+  app: "docker-react"
+  env: "Dockerreact-env"
+  bucket_name: "elasticbeanstalk-us-east-2-324597442476"
+  bucket_path: "docker-react"
+  on:
+    branch: 
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
+  
